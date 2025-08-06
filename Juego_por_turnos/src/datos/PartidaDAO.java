@@ -6,8 +6,9 @@ package datos;
 
 /**
  *
- * @author jh599
+ * @author Jairo Herrera Romero
  */
+
 // datos/PartidaDAO.java
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,6 +18,7 @@ import java.sql.SQLException;
  * Clase de acceso a datos para registrar el resultado de las partidas.
  * Almacena quién ganó, quién perdió, la fecha y la razón del fin del combate.
  */
+
 public class PartidaDAO {
 
     /**

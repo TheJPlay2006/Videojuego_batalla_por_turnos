@@ -11,6 +11,7 @@ import entidades.Raza;
  *
  * @author Jairo Herrera Romero
  */
+
 // modelos/Personaje.java
 public abstract class Personaje {
     protected String nombre;

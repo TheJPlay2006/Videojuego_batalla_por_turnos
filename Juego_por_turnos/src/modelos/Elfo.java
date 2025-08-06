@@ -8,6 +8,7 @@ package modelos;
  *
  * @author Jairo Herrera Romero
  */
+
 // modelos/Elfo.java
 import entidades.Arma;
 import entidades.Raza;

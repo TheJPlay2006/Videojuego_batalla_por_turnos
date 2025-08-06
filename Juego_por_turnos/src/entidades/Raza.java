@@ -8,6 +8,7 @@ package entidades;
  *
  * @author Jairo Herrera Romero
  */
+
 // entidades/Raza.java
 public class Raza {
     private int id;
