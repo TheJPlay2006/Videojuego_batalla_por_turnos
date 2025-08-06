@@ -8,6 +8,7 @@ package entidades;
  *
  * @author Jairo Herrera Romero
  */
+
 // entidades/Arma.java
 public class Arma {
     private int id;
