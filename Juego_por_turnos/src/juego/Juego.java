@@ -16,7 +16,7 @@ import entidades.Jugador;
 
 /**
  *
- * @author USER
+ * @author Emesis
  */
 /**
  * Clase principal del videojuego de combate por turnos.
@@ -102,7 +102,7 @@ public class Juego {
             rsArma.close();
         }
 
-        System.out.println("✅ Datos cargados desde la base de datos.");
+        System.out.println(" Datos cargados desde la base de datos.");
     }
 
     /**
@@ -131,7 +131,7 @@ public class Juego {
         // Buscar raza por ID
         Raza raza = obtenerRaza(razaId);
         if (raza == null) {
-            System.out.println("❌ Raza inválida. Seleccionando Orco por defecto.");
+            System.out.println(" Raza inválida. Seleccionando Orco por defecto.");
             raza = obtenerRaza(3);
         }
 
@@ -148,7 +148,7 @@ public class Juego {
             case 3: return new Orco(nombre, arma, raza);
             case 4: return new Bestia(nombre, arma, raza);
             default:
-                System.out.println("❌ Opción inválida. Seleccionando Orco por defecto.");
+                System.out.println(" Opción inválida. Seleccionando Orco por defecto.");
                 return new Orco(nombre, arma, raza);
         }
     }
@@ -185,7 +185,7 @@ public class Juego {
         }
 
         if (armasValidas.isEmpty()) {
-            System.out.println("❌ No hay armas disponibles para esta raza.");
+            System.out.println(" No hay armas disponibles para esta raza.");
             return armas.get(0); // Valor por defecto
         }
 
@@ -232,7 +232,7 @@ public class Juego {
 
             // Turno jugador 1
             if (jugador1.getVidaActual() > 0) {
-                System.out.println("➡️  Turno de " + jugador1.getNombre());
+                System.out.println("️  Turno de " + jugador1.getNombre());
                 gestionarDistancia();
                 if (distancia <= 1) {
                     realizarAccion(jugador1, jugador2);
@@ -251,7 +251,7 @@ public class Juego {
 
             // Turno jugador 2
             if (jugador2.getVidaActual() > 0) {
-                System.out.println("➡️  Turno de " + jugador2.getNombre());
+                System.out.println("️  Turno de " + jugador2.getNombre());
                 gestionarDistancia();
                 if (distancia <= 1) {
                     realizarAccion(jugador2, jugador1);
@@ -272,21 +272,21 @@ public class Juego {
      * Permite modificar la distancia entre jugadores al inicio de cada turno.
      */
     private void gestionarDistancia() {
-        System.out.println("📍 Distancia actual: " + distancia + "m");
+        System.out.println(" Distancia actual: " + distancia + "m");
         System.out.println("1. Avanzar  2. Retroceder  3. Mantener");
         int opcion = sc.nextInt();
 
         switch (opcion) {
             case 1:
                 distancia = Math.max(0, distancia - 1);
-                System.out.println("✅ Avanzando... distancia: " + distancia + "m");
+                System.out.println(" Avanzando... distancia: " + distancia + "m");
                 break;
             case 2:
                 distancia++;
-                System.out.println("✅ Retrocediendo... distancia: " + distancia + "m");
+                System.out.println(" Retrocediendo... distancia: " + distancia + "m");
                 break;
             default:
-                System.out.println("➡️  Manteniendo distancia.");
+                System.out.println("️  Manteniendo distancia.");
                 break;
         }
     }
@@ -320,7 +320,7 @@ public class Juego {
                 System.out.println(atacante.getNombre() + " se defiende. (Defensa no implementada aún)");
                 break;
             default:
-                System.out.println("❌ Opción inválida. Pierdes el turno.");
+                System.out.println(" Opción inválida. Pierdes el turno.");
                 break;
         }
     }
