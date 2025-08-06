@@ -18,14 +18,30 @@ import entidades.Jugador;
  *
  * @author USER
  */
+/**
+ * Clase principal del videojuego de combate por turnos.
+ * Gestiona la lógica general del juego: carga de datos, creación de personajes,
+ * desarrollo del combate, y almacenamiento de resultados.
+ */
 public class Juego {
+
+    // Scanner para entrada de datos por consola
     private Scanner sc = new Scanner(System.in);
+
+    // Listas que almacenan razas y armas disponibles
     private List<Raza> razas;
     private List<Arma> armas;
+
+    // Instancias de los personajes/jugadores
     private Personaje jugador1;
     private Personaje jugador2;
-    private int distancia = 5; // metros
 
+    // Distancia entre los personajes (en metros)
+    private int distancia = 5;
+
+    /**
+     * Método principal que lanza la ejecución del juego.
+     */
     public static void main(String[] args) {
         Juego juego = new Juego();
         try {
@@ -36,14 +52,21 @@ public class Juego {
         }
     }
 
+    /**
+     * Método que inicia el flujo principal del juego:
+     * carga datos, crea jugadores, ejecuta combate y guarda resultados.
+     */
     public void iniciar() throws SQLException {
-        System.out.println("⚔️ BIENVENIDO AL VIDEOJUEGO DE COMBATE POR TURNOS ⚔️");
+        System.out.println("️ BIENVENIDO AL VIDEOJUEGO DE COMBATE POR TURNOS ️");
         cargarDatos();
         crearJugadores();
         combate();
         guardarResultado();
     }
 
+    /**
+     * Carga razas y armas desde la base de datos.
+     */
     private void cargarDatos() throws SQLException {
         String sqlRaza = "SELECT id, nombre, descripcion FROM raza";
         String sqlArma = "SELECT id, nombre, tipo, dano_minimo, dano_maximo, modificadores FROM arma";
@@ -51,6 +74,7 @@ public class Juego {
         try (Connection conn = ConexionBD.getConnection();
              Statement stmt = conn.createStatement()) {
 
+            // Cargar razas
             ResultSet rsRaza = stmt.executeQuery(sqlRaza);
             razas = new ArrayList<>();
             while (rsRaza.next()) {
@@ -62,6 +86,7 @@ public class Juego {
             }
             rsRaza.close();
 
+            // Cargar armas
             ResultSet rsArma = stmt.executeQuery(sqlArma);
             armas = new ArrayList<>();
             while (rsArma.next()) {
@@ -76,54 +101,68 @@ public class Juego {
             }
             rsArma.close();
         }
+
         System.out.println("✅ Datos cargados desde la base de datos.");
     }
 
+    /**
+     * Solicita los nombres de los jugadores y crea sus respectivos personajes.
+     */
     private void crearJugadores() throws SQLException {
-        System.out.print("🎮 Jugador 1 - Nombre: ");
+        System.out.print(" Jugador 1 - Nombre: ");
         String nombre1 = sc.nextLine();
         jugador1 = crearPersonaje(nombre1, 1);
 
-        System.out.print("🎮 Jugador 2 - Nombre: ");
+        System.out.print(" Jugador 2 - Nombre: ");
         String nombre2 = sc.nextLine();
         jugador2 = crearPersonaje(nombre2, 2);
     }
 
+    /**
+     * Crea un personaje para un jugador determinado, permitiéndole elegir raza y arma.
+     */
     private Personaje crearPersonaje(String nombre, int jugadorId) {
         System.out.println("\n" + nombre + ", elige una raza:");
         System.out.println("1. Humano  2. Elfo  3. Orco  4. Bestia");
 
         int razaId = sc.nextInt();
-        sc.nextLine(); // limpiar buffer
+        sc.nextLine(); // Limpiar buffer
 
+        // Buscar raza por ID
         Raza raza = obtenerRaza(razaId);
         if (raza == null) {
             System.out.println("❌ Raza inválida. Seleccionando Orco por defecto.");
             raza = obtenerRaza(3);
         }
 
+        // Elegir arma válida según la raza
         Arma arma = seleccionarArma(raza);
+
+        // Calcular vida inicial (puede variar según raza/arma)
         int vidaInicial = calcularVidaInicial(raza, arma);
 
+        // Crear el personaje según su raza
         switch (razaId) {
-            case 1:
-                return new Humano(nombre, arma, raza);
-            case 2:
-                return new Elfo(nombre, arma, raza);
-            case 3:
-                return new Orco(nombre, arma, raza);
-            case 4:
-                return new Bestia(nombre, arma, raza);
+            case 1: return new Humano(nombre, arma, raza);
+            case 2: return new Elfo(nombre, arma, raza);
+            case 3: return new Orco(nombre, arma, raza);
+            case 4: return new Bestia(nombre, arma, raza);
             default:
                 System.out.println("❌ Opción inválida. Seleccionando Orco por defecto.");
                 return new Orco(nombre, arma, raza);
         }
     }
 
+    /**
+     * Busca una raza por su ID.
+     */
     private Raza obtenerRaza(int id) {
         return razas.stream().filter(r -> r.getId() == id).findFirst().orElse(null);
     }
 
+    /**
+     * Muestra las armas disponibles según la raza del personaje y permite seleccionar una.
+     */
     private Arma seleccionarArma(Raza raza) {
         List<Arma> armasValidas = new ArrayList<>();
 
@@ -141,47 +180,57 @@ public class Juego {
                 armasValidas = filtrarArmas("Puños", "Espada");
                 break;
             default:
-                System.out.println("⚠️  Raza no soportada.");
+                System.out.println("️  Raza no soportada.");
                 break;
         }
 
         if (armasValidas.isEmpty()) {
             System.out.println("❌ No hay armas disponibles para esta raza.");
-            return armas.get(0); // fallback
+            return armas.get(0); // Valor por defecto
         }
 
+        // Mostrar opciones
         System.out.println("Elige tu arma:");
         for (int i = 0; i < armasValidas.size(); i++) {
             System.out.println((i + 1) + ". " + armasValidas.get(i).getNombre() + " → " + armasValidas.get(i).getModificadores());
         }
 
         int opcion = sc.nextInt();
-        sc.nextLine();
+        sc.nextLine(); // Limpiar buffer
         return armasValidas.get(opcion - 1);
     }
 
+    /**
+     * Filtra la lista de armas disponibles según los nombres permitidos.
+     */
     private List<Arma> filtrarArmas(String... nombres) {
         return armas.stream()
                 .filter(arma -> Arrays.asList(nombres).contains(arma.getNombre()))
                 .toList();
     }
 
+    /**
+     * Calcula la vida inicial del personaje según su raza y arma.
+     */
     private int calcularVidaInicial(Raza raza, Arma arma) {
         if (raza.getNombre().equals("Elfo") && arma.getNombre().equals("Báculo Agua")) {
-            return 115;
+            return 115; // Bonificación especial
         }
         return 100;
     }
 
+    /**
+     * Desarrolla el combate por turnos entre los dos jugadores.
+     */
     private void combate() {
-        System.out.println("\n🔥 ¡COMIENZA EL DUELO! 🔥");
+        System.out.println("\n ¡COMIENZA EL DUELO! ");
         int turno = 1;
 
         while (jugador1.getVidaActual() > 0 && jugador2.getVidaActual() > 0) {
             System.out.println("\n--- Turno " + turno + " ---");
             mostrarEstado();
 
-            // Turno Jugador 1
+            // Turno jugador 1
             if (jugador1.getVidaActual() > 0) {
                 System.out.println("➡️  Turno de " + jugador1.getNombre());
                 gestionarDistancia();
@@ -192,14 +241,15 @@ public class Juego {
                 }
             }
 
-            // Aplicar efectos especiales (sangrado)
+            // Aplicar sangrado (si es Orco)
             if (jugador1 instanceof Orco) {
                 ((Orco) jugador1).aplicarSangrado();
             }
 
+            // Verificar si jugador 2 sigue vivo
             if (jugador2.getVidaActual() <= 0) break;
 
-            // Turno Jugador 2
+            // Turno jugador 2
             if (jugador2.getVidaActual() > 0) {
                 System.out.println("➡️  Turno de " + jugador2.getNombre());
                 gestionarDistancia();
@@ -218,6 +268,9 @@ public class Juego {
         }
     }
 
+    /**
+     * Permite modificar la distancia entre jugadores al inicio de cada turno.
+     */
     private void gestionarDistancia() {
         System.out.println("📍 Distancia actual: " + distancia + "m");
         System.out.println("1. Avanzar  2. Retroceder  3. Mantener");
@@ -238,10 +291,16 @@ public class Juego {
         }
     }
 
+    /**
+     * Verifica si los personajes están fuera del rango de ataque.
+     */
     private boolean enDistancia() {
         return distancia > 1;
     }
 
+    /**
+     * Ejecuta la acción del personaje (atacar, sanar o defender).
+     */
     private void realizarAccion(Personaje atacante, Personaje defensor) {
         System.out.println("\n" + atacante.getNombre() + ", elige acción:");
         System.out.println("1. Atacar  2. Sanar  3. Defender");
@@ -258,7 +317,7 @@ public class Juego {
                 atacante.sanar();
                 break;
             case 3:
-                System.out.println(atacante.getNombre() + " se defiende. (Defensa no reduce daño aún)");
+                System.out.println(atacante.getNombre() + " se defiende. (Defensa no implementada aún)");
                 break;
             default:
                 System.out.println("❌ Opción inválida. Pierdes el turno.");
@@ -266,17 +325,24 @@ public class Juego {
         }
     }
 
+    /**
+     * Muestra el estado actual de ambos jugadores.
+     */
     private void mostrarEstado() {
-        System.out.println("\n📊 ESTADO ACTUAL:");
+        System.out.println("\n ESTADO ACTUAL:");
         System.out.println(jugador1);
         System.out.println(jugador2);
     }
 
+    /**
+     * Guarda el resultado del combate en la base de datos (jugadores y personajes).
+     */
     private void guardarResultado() {
         try (Connection conn = ConexionBD.getConnection()) {
             PersonajeDAO personajeDAO = new PersonajeDAO();
             JugadorDAO jugadorDAO = new JugadorDAO();
 
+            // Buscar o crear jugadores en la BD
             Jugador j1 = jugadorDAO.buscarPorNombre(jugador1.getNombre());
             Jugador j2 = jugadorDAO.buscarPorNombre(jugador2.getNombre());
 
@@ -289,14 +355,17 @@ public class Juego {
                 jugadorDAO.insertarJugador(j2);
             }
 
+            // Determinar ganador
             Jugador ganador = jugador1.getVidaActual() > 0 ? j1 : j2;
             Jugador perdedor = ganador == j1 ? j2 : j1;
 
-            System.out.println("\n🏆 ¡" + (ganador == j1 ? jugador1.getNombre() : jugador2.getNombre()) + " GANA LA PARTIDA!");
+            System.out.println("\n ¡" + (ganador == j1 ? jugador1.getNombre() : jugador2.getNombre()) + " GANA LA PARTIDA!");
 
+            // Guardar personajes asociados a los jugadores
             personajeDAO.guardar(jugador1, j1.getId());
             personajeDAO.guardar(jugador2, j2.getId());
 
+            // Actualizar estadísticas
             ganador.setPartidasGanadas(ganador.getPartidasGanadas() + 1);
             perdedor.setPartidasPerdidas(perdedor.getPartidasPerdidas() + 1);
 
