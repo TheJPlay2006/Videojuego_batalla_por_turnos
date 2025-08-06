@@ -14,7 +14,7 @@ import entidades.Raza;
 import java.util.Random;
 
 public class Humano extends Personaje {
-    public Humano(String nombre, Arma arma) {
+    public Humano(String nombre, Arma arma,Raza raza) {
         super(nombre, 100, 10, 100, arma, new Raza(1, "Humano", "Usa armas de fuego"));
     }
 

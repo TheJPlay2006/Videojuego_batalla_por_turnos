@@ -17,7 +17,7 @@ import java.util.Random;
 public class Elfo extends Personaje {
     private boolean esAgua;
 
-    public Elfo(String nombre, Arma arma) {
+    public Elfo(String nombre, Arma arma,Raza raza) {
         super(nombre, arma.getTipo().equals("agua") ? 115 : 100, 10, 100, arma, new Raza(2, "Elfo", "Magia elemental"));
         this.esAgua = arma.getTipo().equals("agua");
     }
