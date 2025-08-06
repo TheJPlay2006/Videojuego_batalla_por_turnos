@@ -8,6 +8,7 @@ package modelos;
  *
  * @author Jairo Herrera Romero
  */
+
 // modelos/Humano.java
 import entidades.Arma;
 import entidades.Raza;
