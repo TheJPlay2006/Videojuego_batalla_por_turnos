@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Main;
+import Juego.Juego;
 
 /**
  *
@@ -11,6 +12,12 @@ package Main;
 
 public class Main {
       public static void main(String[] args) {
-        // TODO code application logic here
+        Juego juego = new Juego();
+        try {
+            juego.iniciar();
+        } catch (Exception e) {
+            System.out.println("❌ Error inesperado: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
