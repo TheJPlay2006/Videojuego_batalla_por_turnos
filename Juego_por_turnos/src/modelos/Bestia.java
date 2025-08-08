@@ -12,6 +12,7 @@ import entidades.Raza;
  *
  * @author Emesis
  */
+
 public class Bestia extends Personaje{
     private Random rand = new Random();
     

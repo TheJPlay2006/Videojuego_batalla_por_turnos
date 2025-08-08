@@ -4,9 +4,9 @@
  */
 package modelos;
 
-import java.util.Random;
 import entidades.Arma;
 import entidades.Raza;
+import java.util.Random;
 
 /**
  *
