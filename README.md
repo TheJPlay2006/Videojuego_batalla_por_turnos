@@ -239,7 +239,7 @@ String connectionUrl = "jdbc:sqlserver://localhost:1433;"
 <tr>
 <td align="center">
 
-### 👨‍💻 **Jairo Herrera**
+### 👨‍💻 **Jairo Herrera Romero**
 **🏗️ Arquitecto Principal**
 - Diseño de clases y herencia
 - Lógica de combate
@@ -249,7 +249,7 @@ String connectionUrl = "jdbc:sqlserver://localhost:1433;"
 </td>
 <td align="center">
 
-### 👨‍💻 **[Tu Compañero]**
+### 👨‍💻 **Emesis Mairena Sevilla**
 **🎨 Desarrollador Frontend**
 - Menús interactivos
 - Flujo del juego
@@ -369,6 +369,6 @@ String connectionUrl = "jdbc:sqlserver://localhost:1433;"
 
 ---
 
-*© 2024 - Proyecto Académico • Videojuego de Combate por Turnos*
-
+*© 2025 - Proyecto Académico • Videojuego de Combate por Turnos*
+*Desarrollado por Jairo Herrera Romero y Emesis Mairena Sevilla*
 </div>
